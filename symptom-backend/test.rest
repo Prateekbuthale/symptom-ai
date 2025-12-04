@@ -1,0 +1,55 @@
+### 1. Health check
+GET http://localhost:5003/
+
+### 2. Signup
+POST http://localhost:5003/api/auth/signup
+Content-Type: application/json
+
+{
+  "email": "test1@example.com",
+  "password": "pass1234"
+}
+
+### 3. Login
+POST http://localhost:5003/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test1@example.com",
+  "password": "pass1234"
+}
+
+### Copy the token from the login response and paste it below ↓↓↓
+
+### 4. Safe symptom assessment (example)
+POST http://localhost:5003/api/assessment
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwiaWF0IjoxNzY0NzcwNDMxLCJleHAiOjE3NjUzNzUyMzF9.fQ3LmCsPjNhV4nKvabFOsOveiG9nHCCMtVPoSdvIWlk
+
+{
+  "text": "I have a mild chest pain and feel dizzy for 2 days",
+  "age": 25,
+  "sex": "male"
+}
+
+### 5. Emergency symptom test (should trigger red flags)
+POST http://localhost:5003/api/assessment
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwiaWF0IjoxNzY0NzcwNDMxLCJleHAiOjE3NjUzNzUyMzF9.fQ3LmCsPjNhV4nKvabFOsOveiG9nHCCMtVPoSdvIWlk
+
+{
+  "text": "I feel chest pain and shortness of breath",
+  "age": 42,
+  "sex": "male"
+}
+
+### 6. Another safe example
+POST http://localhost:5003/api/assessment
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwiaWF0IjoxNzY0NzcwNDMxLCJleHAiOjE3NjUzNzUyMzF9.fQ3LmCsPjNhV4nKvabFOsOveiG9nHCCMtVPoSdvIWlk
+
+{
+  "text": "I have stomach pain for 3 hours and nausea",
+  "age": 32,
+  "sex": "female"
+}

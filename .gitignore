@@ -1,0 +1,34 @@
+# Node
+node_modules/
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+
+# Environment Variables
+.env
+.env*.local
+
+# Output
+dist/
+build/
+.vite/
+
+# Logs
+logs/
+*.log
+
+# Editor
+.vscode/
+.idea/
+
+# Mac
+.DS_Store
+
+# Cache
+.cache/
+.tmp/
+
+# Optional lockfiles (remove if you want deterministic builds)
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
