@@ -1,30 +1,41 @@
-### 1. Health check
+############################################################
+### 1. Health Check
+############################################################
 GET http://localhost:5003/
 
+
+############################################################
 ### 2. Signup
+############################################################
 POST http://localhost:5003/api/auth/signup
 Content-Type: application/json
 
 {
-  "email": "test1@example.com",
+  "email": "test12@example.com",
   "password": "pass1234"
 }
 
+
+############################################################
 ### 3. Login
+############################################################
 POST http://localhost:5003/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test1@example.com",
+  "email": "test12@example.com",
   "password": "pass1234"
 }
 
-### Copy the token from the login response and paste it below ↓↓↓
+### Copy token from login response and paste below ↓↓↓↓↓↓↓
 
-### 4. Safe symptom assessment (example)
+
+############################################################
+### 4. Safe Symptom Assessment
+############################################################
 POST http://localhost:5003/api/assessment
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwiaWF0IjoxNzY0NzcwNDMxLCJleHAiOjE3NjUzNzUyMzF9.fQ3LmCsPjNhV4nKvabFOsOveiG9nHCCMtVPoSdvIWlk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJlbWFpbCI6InRlc3QxMkBleGFtcGxlLmNvbSIsImlhdCI6MTc2NDg1NzM4MCwiZXhwIjoxNzY1NDYyMTgwfQ.jvLcr4QbKPE4eN7q11HIRLdjUrg9MaCBOg-BlNAZSWU
 
 {
   "text": "I have a mild chest pain and feel dizzy for 2 days",
@@ -32,10 +43,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJlbWFpb
   "sex": "male"
 }
 
-### 5. Emergency symptom test (should trigger red flags)
+
+############################################################
+### 5. Emergency Symptom Test
+############################################################
 POST http://localhost:5003/api/assessment
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwiaWF0IjoxNzY0NzcwNDMxLCJleHAiOjE3NjUzNzUyMzF9.fQ3LmCsPjNhV4nKvabFOsOveiG9nHCCMtVPoSdvIWlk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJlbWFpbCI6InRlc3QxMkBleGFtcGxlLmNvbSIsImlhdCI6MTc2NDg1NzM4MCwiZXhwIjoxNzY1NDYyMTgwfQ.jvLcr4QbKPE4eN7q11HIRLdjUrg9MaCBOg-BlNAZSWU
 
 {
   "text": "I feel chest pain and shortness of breath",
@@ -43,13 +57,69 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJlbWFpb
   "sex": "male"
 }
 
-### 6. Another safe example
+
+############################################################
+### 6. Another Safe Example
+############################################################
 POST http://localhost:5003/api/assessment
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwiaWF0IjoxNzY0NzcwNDMxLCJleHAiOjE3NjUzNzUyMzF9.fQ3LmCsPjNhV4nKvabFOsOveiG9nHCCMtVPoSdvIWlk
+Authorization: Bearer {{token}}
 
 {
   "text": "I have stomach pain for 3 hours and nausea",
   "age": 32,
   "sex": "female"
+}
+
+
+
+############################################################
+### 7. Chat Assessment — First Message
+############################################################
+POST http://localhost:5003/api/assessment/chat
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJlbWFpbCI6InRlc3QxMkBleGFtcGxlLmNvbSIsImlhdCI6MTc2NDg1NzM4MCwiZXhwIjoxNzY1NDYyMTgwfQ.jvLcr4QbKPE4eN7q11HIRLdjUrg9MaCBOg-BlNAZSWU
+
+{
+  "message": "I have been having mild headaches for 2 days",
+  "history": [],
+  "sessionId": "test-session-001"
+}
+
+
+
+############################################################
+### 8. Chat Assessment — Follow-up Message With History
+############################################################
+POST http://localhost:5003/api/assessment/chat
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJlbWFpbCI6InRlc3QxMkBleGFtcGxlLmNvbSIsImlhdCI6MTc2NDg1NzM4MCwiZXhwIjoxNzY1NDYyMTgwfQ.jvLcr4QbKPE4eN7q11HIRLdjUrg9MaCBOg-BlNAZSWU
+
+{
+  "message": "The headache gets worse when I stand",
+  "history": [
+    { "role": "assistant", "content": "How long have you had the headache?" },
+    { "role": "user", "content": "For 2 days" }
+  ],
+  "sessionId": "test-session-001"
+}
+
+
+
+############################################################
+### 9. Chat Assessment — Finalization Example
+############################################################
+POST http://localhost:5003/api/assessment/chat
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJlbWFpbCI6InRlc3QxMkBleGFtcGxlLmNvbSIsImlhdCI6MTc2NDg1NzM4MCwiZXhwIjoxNzY1NDYyMTgwfQ.jvLcr4QbKPE4eN7q11HIRLdjUrg9MaCBOg-BlNAZSWU
+
+{
+  "message": "No nausea or vomiting",
+  "history": [
+    { "role": "assistant", "content": "How long have you had the headache?" },
+    { "role": "user", "content": "About 2 days" },
+    { "role": "assistant", "content": "What makes the headache worse or better?" },
+    { "role": "user", "content": "Standing makes it worse" }
+  ],
+  "sessionId": "test-session-001"
 }

@@ -1,4 +1,4 @@
-import { db } from "../config/db.js";
+import  db  from "../config/db.js";
 import { hashPassword, comparePassword } from "../utils/hash.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";

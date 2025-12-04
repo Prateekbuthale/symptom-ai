@@ -1,75 +1,142 @@
-import React, { useState } from "react";
-import { submitAssessment } from "../utils/api";
-import LoadingSpinner from "../components/LoadingSpinner";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Check() {
-  const [text, setText] = useState("");
-  const [age, setAge] = useState("");
-  const [sex, setSex] = useState("male");
+  const navigate = useNavigate();
+  const [messages, setMessages] = useState([
+    {
+      role: "assistant",
+      content:
+        "Hello! I’m your AI health assistant. Please describe your symptoms in your own words so I can understand what you're experiencing.",
+    },
+  ]);
+
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  async function handleSubmit() {
-    if (!text.trim()) {
-      setError("Please enter symptoms");
-      return;
-    }
+  // Unique session per conversation
+  const [sessionId] = useState(() => crypto.randomUUID());
 
-    setError("");
+  // Ref for auto-scroll
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
+
+  async function sendMessage() {
+    if (!input.trim()) return;
+
+    const newUserMsg = { role: "user", content: input };
+
+    const updatedMessages = [...messages, newUserMsg];
+    setMessages(updatedMessages);
+    setInput("");
     setLoading(true);
 
     try {
-      const result = await submitAssessment({ text, age, sex });
-      localStorage.setItem("assessment_result", JSON.stringify(result));
-      window.location.href = "/result";
+      const res = await fetch("http://localhost:5003/api/assessment/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          message: newUserMsg.content,
+          history: updatedMessages,
+          sessionId,
+        }),
+      });
+
+      const data = await res.json();
+
+      // Debug: Log the response
+      console.log("API Response:", data);
+
+      // If AI generated a final result → redirect to results page
+      if (data.done === true && data.result) {
+        // Debug: Log the result structure
+        console.log("Final result:", data.result);
+        
+        // Save result to localStorage for persistence
+        localStorage.setItem("assessment_result", JSON.stringify(data.result));
+
+        // Navigate and pass state too
+        navigate("/result", { state: { result: data.result } });
+
+        return;
+      }
+
+      // Otherwise add AI reply to chat
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: data.reply || "Can you explain more?" },
+      ]);
     } catch (err) {
-      setError("Something went wrong.");
-    } finally {
-      setLoading(false);
+      console.error("Error sending message:", err);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "Sorry, something went wrong. Please try again." },
+      ]);
     }
+
+    setLoading(false);
   }
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-50 px-4">
-      <div className="bg-white shadow-xl rounded-xl p-8 w-full max-w-lg">
-        <h1 className="text-2xl font-semibold mb-6 text-gray-800">
-          Describe Your Symptoms
-        </h1>
+    <div className="min-h-screen flex flex-col bg-gray-50 pt-20">
+      {/* Chat Window */}
+      <div className="flex-1 max-w-3xl mx-auto w-full p-4 overflow-y-auto space-y-4">
+        {messages.map((msg, i) => (
+          <div
+            key={i}
+            className={`flex ${
+              msg.role === "user" ? "justify-end" : "justify-start"
+            }`}
+          >
+            <div
+              className={`max-w-xs px-4 py-3 rounded-2xl text-sm shadow-md ${
+                msg.role === "user"
+                  ? "bg-blue-600 text-white rounded-br-none"
+                  : "bg-white text-gray-800 rounded-bl-none"
+              }`}
+            >
+              {msg.content}
+            </div>
+          </div>
+        ))}
 
-        <textarea
-          rows="6"
-          placeholder="Example: I have a headache and fatigue for 2 days..."
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg p-3 mb-4 focus:ring-2 focus:ring-blue-500 outline-none"
-        />
+        {loading && (
+          <div className="flex justify-start">
+            <div className="bg-white text-gray-600 px-4 py-3 rounded-2xl shadow rounded-bl-none animate-pulse">
+              AI is thinking…
+            </div>
+          </div>
+        )}
 
-        <input
-          type="number"
-          placeholder="Age"
-          value={age}
-          onChange={(e) => setAge(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg p-3 mb-4 focus:ring-2 focus:ring-blue-500 outline-none"
-        />
+        <div ref={messagesEndRef} />
+      </div>
 
-        <select
-          value={sex}
-          onChange={(e) => setSex(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg p-3 mb-4 focus:ring-2 focus:ring-blue-500 outline-none"
-        >
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
+      {/* Input Bar */}
+      <div className="fixed bottom-0 w-full bg-white border-t">
+        <div className="max-w-3xl mx-auto p-4 flex space-x-3">
+          <input
+            type="text"
+            placeholder="Describe your symptoms or answer the AI..."
+            className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-600 outline-none"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+          />
 
-        {error && <p className="text-red-500 mb-2">{error}</p>}
-
-        <button
-          onClick={handleSubmit}
-          disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg shadow-md disabled:bg-blue-300"
-        >
-          {loading ? <LoadingSpinner /> : "Analyze Symptoms"}
-        </button>
+          <button
+            onClick={sendMessage}
+            disabled={loading}
+            className="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 transition shadow-md"
+          >
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );

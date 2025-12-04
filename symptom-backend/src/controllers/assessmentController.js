@@ -1,5 +1,5 @@
 import { assessSymptoms } from "../services/triageService.js";
-import { db } from "../config/db.js";
+import  db  from "../config/db.js";
 export const assess = async (req, res) => {
   const { text, age, sex } = req.body;
   const userId = req.user?.id || null;
