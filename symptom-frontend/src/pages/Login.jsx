@@ -31,23 +31,23 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="bg-white shadow-lg rounded-xl p-8 max-w-md w-full">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 pt-16">
+      <div className="bg-white border border-gray-200 rounded-lg p-6 sm:p-8 max-w-md w-full shadow-sm">
+        <h1 className="text-2xl font-semibold text-gray-900 mb-6 text-center">
           Login to MediCheck
         </h1>
 
         {error && (
-          <p className="text-red-500 bg-red-100 p-2 rounded mb-4 text-center">
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
             {error}
-          </p>
+          </div>
         )}
 
         <form className="space-y-4" onSubmit={handleLogin}>
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
+            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none text-sm"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -55,19 +55,22 @@ export default function Login() {
           <input
             type="password"
             placeholder="Password"
-            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
+            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none text-sm"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition">
+          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-medium transition shadow-sm">
             Login
           </button>
         </form>
 
-        <p className="text-center text-gray-600 text-sm mt-4">
-          Don’t have an account?{" "}
-          <a href="/signup" className="text-blue-600 underline">
+        <p className="text-center text-gray-600 text-sm mt-6">
+          Don't have an account?{" "}
+          <a
+            href="/signup"
+            className="text-blue-600 hover:text-blue-700 font-medium"
+          >
             Sign up
           </a>
         </p>

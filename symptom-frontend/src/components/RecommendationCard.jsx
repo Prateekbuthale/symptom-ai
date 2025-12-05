@@ -1,15 +1,23 @@
 export default function RecommendationCard({ rec }) {
   return (
-    <div className="bg-white shadow-md p-5 rounded-lg border">
-      <p className="mb-3">
-        <strong>Mild:</strong> {rec.mild}
-      </p>
-      <p className="mb-3">
-        <strong>Moderate:</strong> {rec.moderate}
-      </p>
-      <p>
-        <strong>Warning Signs:</strong> {rec.warning}
-      </p>
+    <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+      {rec.mild && (
+        <p className="mb-3 text-sm text-gray-700">
+          <span className="font-medium text-gray-900">Mild:</span> {rec.mild}
+        </p>
+      )}
+      {rec.moderate && (
+        <p className="mb-3 text-sm text-gray-700">
+          <span className="font-medium text-gray-900">Moderate:</span>{" "}
+          {rec.moderate}
+        </p>
+      )}
+      {rec.warning && (
+        <p className="text-sm text-gray-700">
+          <span className="font-medium text-gray-900">Warning Signs:</span>{" "}
+          {rec.warning}
+        </p>
+      )}
     </div>
   );
 }

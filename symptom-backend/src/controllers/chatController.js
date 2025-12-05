@@ -510,3 +510,50 @@ CRITICAL: Output ONLY the JSON object. No \`\`\`json blocks. No additional text 
       .json({ error: "Chat engine failed", details: err.message });
   }
 };
+
+// Return all chat sessions and messages for the authenticated user
+export const getChatHistory = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const result = await db.query(
+      `
+        SELECT session_id, role, content, created_at
+        FROM chat_messages
+        WHERE user_id=$1
+        ORDER BY session_id, created_at ASC
+      `,
+      [userId]
+    );
+
+    const sessionsMap = new Map();
+    for (const row of result.rows) {
+      if (!sessionsMap.has(row.session_id)) {
+        sessionsMap.set(row.session_id, []);
+      }
+      sessionsMap.get(row.session_id).push({
+        role: row.role,
+        content: row.content,
+        created_at: row.created_at,
+      });
+    }
+
+    const sessions = Array.from(sessionsMap.entries()).map(
+      ([sessionId, messages]) => ({
+        sessionId,
+        messages,
+        lastUpdated: messages[messages.length - 1]?.created_at || null,
+      })
+    );
+
+    sessions.sort((a, b) => {
+      if (!a.lastUpdated) return 1;
+      if (!b.lastUpdated) return -1;
+      return new Date(b.lastUpdated) - new Date(a.lastUpdated);
+    });
+
+    return res.json({ sessions });
+  } catch (err) {
+    console.error("❌ getChatHistory error:", err);
+    return res.status(500).json({ error: "Failed to fetch chat history" });
+  }
+};

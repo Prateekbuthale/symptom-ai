@@ -1,35 +1,47 @@
+import { useNavigate } from "react-router-dom";
+
 export default function Navbar() {
+  const navigate = useNavigate();
+  const hasToken = Boolean(localStorage.getItem("token"));
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("assessment_result");
+    navigate("/login");
+  };
+
   return (
-    <nav className="w-full bg-white shadow-sm fixed top-0 left-0 z-50">
-      <div className="max-w-6xl mx-auto px-6 h-16 flex justify-between items-center">
+    <nav className="w-full bg-white border-b border-gray-200 fixed top-0 left-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <div className="bg-brand-blue text-white font-bold w-10 h-10 rounded-full flex items-center justify-center">
-            <span className="text-xl">λ</span>
-          </div>
-          <span className="text-xl font-semibold text-gray-800">MediCheck</span>
+          <span className="text-lg font-semibold text-gray-900">MediCheck</span>
         </div>
 
         {/* Links */}
-        <div className="flex gap-6 text-gray-600 font-medium">
-          <a href="/" className="hover:text-brand-blue">
+        <div className="hidden md:flex gap-6 text-md text-gray-600 font-medium">
+          <a href="/" className="hover:text-blue-600 transition">
             Home
           </a>
-          <a href="/how" className="hover:text-brand-blue">
+          <a href="/how" className="hover:text-blue-600 transition">
             How it Works
           </a>
-          <a href="/conditions" className="hover:text-brand-blue">
+          <a href="/conditions" className="hover:text-blue-600 transition">
             Conditions
           </a>
         </div>
 
-        {/* CTA */}
-        <a
-          href="/check"
-          className="bg-brand-blue text-white px-5 py-2 rounded-full font-medium hover:bg-blue-700 transition"
-        >
-          Start Check
-        </a>
+        {/* CTA / Auth */}
+        <div className="flex items-center gap-3">
+          {hasToken && (
+            <button
+              onClick={handleLogout}
+              className="text-md text-gray-600 hover:text-blue-600 font-medium transition"
+            >
+              Logout
+            </button>
+          )}
+        </div>
       </div>
     </nav>
   );
