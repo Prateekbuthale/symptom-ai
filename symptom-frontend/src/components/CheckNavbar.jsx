@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-export default function Navbar() {
+export default function CheckNavbar() {
   const navigate = useNavigate();
   const hasToken = Boolean(localStorage.getItem("token"));
 
@@ -19,16 +19,14 @@ export default function Navbar() {
         </div>
 
         {/* Links */}
-        <div className="hidden md:flex gap-6 text-sm text-gray-600 font-medium">
+        <div className="hidden md:flex gap-6 text-md text-gray-600 font-medium">
           <a href="/" className="hover:text-blue-600 transition">
             Home
           </a>
-          <a href="/how" className="hover:text-blue-600 transition">
-            How it Works
+          <a href="/results" className="hover:text-blue-600 transition">
+            Results
           </a>
-          <a href="/conditions" className="hover:text-blue-600 transition">
-            Conditions
-          </a>
+          
         </div>
 
         {/* CTA / Auth */}
@@ -36,7 +34,7 @@ export default function Navbar() {
           {hasToken && (
             <button
               onClick={handleLogout}
-              className="text-sm text-gray-600 hover:text-blue-600 font-medium transition"
+              className="text-md text-gray-600 hover:text-blue-600 font-medium transition"
             >
               Logout
             </button>

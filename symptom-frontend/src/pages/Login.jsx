@@ -31,7 +31,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 pt-16">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="bg-white border border-gray-200 rounded-lg p-6 sm:p-8 max-w-md w-full shadow-sm">
         <h1 className="text-2xl font-semibold text-gray-900 mb-6 text-center">
           Login to MediCheck

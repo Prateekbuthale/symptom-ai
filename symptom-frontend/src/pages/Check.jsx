@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import CheckNavbar from "../components/CheckNavbar";
+import ChatInput from "../components/ChatInput";
+import ChatSidebar from "../components/ChatSidebar";
 
 export default function Check() {
   const navigate = useNavigate();
@@ -220,15 +223,21 @@ export default function Check() {
 
       // If AI generated a final result → redirect to results page
       if (data.done === true && data.result) {
-        // Debug: Log the result structure
         console.log("Final result:", data.result);
 
-        // Save result to localStorage for persistence
+        const resultMessage = {
+          role: "assistant",
+          content: JSON.stringify(data.result),
+        };
+
+        // ✅ Append result directly into chat
+        setMessages((prev) => [...prev, resultMessage]);
+
+        // ✅ Optional: store for later use (no redirect)
         localStorage.setItem("assessment_result", JSON.stringify(data.result));
 
-        // Navigate and pass state too
-        navigate("/result", { state: { result: data.result } });
-
+        setLoading(false);
+        fetchHistory(); // keep sidebar updated
         return;
       }
 
@@ -256,57 +265,22 @@ export default function Check() {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-16">
-      <div className="w-full flex min-h-[calc(100vh-4rem)]">
+      <CheckNavbar />
+      <div className="w-full flex  min-h-[calc(100vh-4rem)]">
         {/* Sidebar */}
-        <aside className="w-64 bg-white border border-gray-200  min-h-[calc(100vh-5rem)] sticky flex flex-col shadow-sm">
-          <div className="p-3 border-b border-gray-200 flex items-center justify-between">
-            <h3 className="text-md font-semibold text-gray-900">Your Chats</h3>
-            <button
-              onClick={startNewSession}
-              className="text-md text-blue-600 hover:text-blue-700 font-medium"
-            >
-              New
-            </button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto">
-            {historyLoading ? (
-              <div className="p-3 text-md text-gray-500">Loading history…</div>
-            ) : sessions.length === 0 ? (
-              <div className="p-3 text-md text-gray-500">
-                No chats yet. Start a new conversation.
-              </div>
-            ) : (
-              sessions.map((session) => {
-                const lastMessageRaw =
-                  session.messages?.[session.messages.length - 1]?.content ||
-                  "No messages";
-                const lastMessage = summarizeContent(lastMessageRaw);
-                const isActive = session.sessionId === sessionId;
-                return (
-                  <button
-                    key={session.sessionId}
-                    onClick={() => selectSession(session)}
-                    className={`w-full text-left px-3 py-2.5 border-b border-gray-100 hover:bg-blue-50 transition ${
-                      isActive ? "bg-blue-50" : ""
-                    }`}
-                  >
-                    <div className="text-md font-medium text-gray-900 truncate mb-0.5">
-                      {firstSymptomLabel(session)}
-                    </div>
-                    <div className="text-md text-gray-500 truncate">
-                      {lastMessage}
-                    </div>
-                  </button>
-                );
-              })
-            )}
-          </div>
-        </aside>
+        <ChatSidebar
+          sessions={sessions}
+          historyLoading={historyLoading}
+          sessionId={sessionId}
+          startNewSession={startNewSession}
+          selectSession={selectSession}
+          summarizeContent={summarizeContent}
+          firstSymptomLabel={firstSymptomLabel}
+        />
 
         {/* Chat area */}
-        <div className="flex-1 flex flex-col bg-white border border-gray-200  shadow-sm">
-          <div className="flex-1 p-4 overflow-y-auto space-y-3">
+        <div className="flex-1 flex  ml-64 flex-col bg-white border border-gray-200  shadow-sm">
+          <div className="flex-1 p-4  space-y-3">
             {messages.map((msg, i) => (
               <div
                 key={i}
@@ -338,26 +312,12 @@ export default function Check() {
           </div>
 
           {/* Input Bar */}
-          <div className="border-t border-gray-200 px-4 py-3">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Describe your symptoms or answer the AI..."
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none text-md"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              />
-
-              <button
-                onClick={sendMessage}
-                disabled={loading}
-                className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm text-md font-medium disabled:opacity-50"
-              >
-                Send
-              </button>
-            </div>
-          </div>
+          <ChatInput
+            input={input}
+            setInput={setInput}
+            sendMessage={sendMessage}
+            loading={loading}
+          />
         </div>
       </div>
     </div>

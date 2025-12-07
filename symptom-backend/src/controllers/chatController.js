@@ -102,7 +102,7 @@ function validateAssessmentResult(result) {
 /* --------------------------------------------------------
    SYSTEM PROMPT FOR FOLLOW-UP QUESTIONS
 --------------------------------------------------------- */
-const systemPrompt = `You are a medical triage assistant. You MUST ALWAYS output VALID JSON with NO additional text.
+const systemPrompt = `You are a medical assessment assistant. You MUST ALWAYS output VALID JSON with NO additional text.
 
 CRITICAL RULES - READ CAREFULLY:
 1. EVERY response must be ONLY a JSON object
@@ -375,7 +375,7 @@ Output format:
       }
 
       /* Build final assessment prompt */
-      const finalPrompt = `Generate a medical triage assessment based on the structured symptom data below.
+      const finalPrompt = `Generate a medical assessment based on the structured symptom data below.
 
 Output ONLY raw JSON in this EXACT format (no markdown code blocks, no explanations):
 
