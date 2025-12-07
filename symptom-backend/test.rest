@@ -1,13 +1,13 @@
 ############################################################
 ### 1. Health Check
 ############################################################
-GET http://localhost:5003/
+GET ${import.meta.env.VITE_BACKEND_BASEURL}/
 
 
 ############################################################
 ### 2. Signup
 ############################################################
-POST http://localhost:5003/api/auth/signup
+POST ${import.meta.env.VITE_BACKEND_BASEURL}/api/auth/signup
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ Content-Type: application/json
 ############################################################
 ### 3. Login
 ############################################################
-POST http://localhost:5003/api/auth/login
+POST ${import.meta.env.VITE_BACKEND_BASEURL}/api/auth/login
 Content-Type: application/json
 
 {
@@ -33,7 +33,7 @@ Content-Type: application/json
 ############################################################
 ### 4. Safe Symptom Assessment
 ############################################################
-POST http://localhost:5003/api/assessment
+POST ${import.meta.env.VITE_BACKEND_BASEURL}/api/assessment
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJlbWFpbCI6InRlc3QxMkBleGFtcGxlLmNvbSIsImlhdCI6MTc2NDg1NzM4MCwiZXhwIjoxNzY1NDYyMTgwfQ.jvLcr4QbKPE4eN7q11HIRLdjUrg9MaCBOg-BlNAZSWU
 
@@ -47,7 +47,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJlbWFpb
 ############################################################
 ### 5. Emergency Symptom Test
 ############################################################
-POST http://localhost:5003/api/assessment
+POST ${import.meta.env.VITE_BACKEND_BASEURL}/api/assessment
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJlbWFpbCI6InRlc3QxMkBleGFtcGxlLmNvbSIsImlhdCI6MTc2NDg1NzM4MCwiZXhwIjoxNzY1NDYyMTgwfQ.jvLcr4QbKPE4eN7q11HIRLdjUrg9MaCBOg-BlNAZSWU
 
@@ -61,7 +61,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJlbWFpb
 ############################################################
 ### 6. Another Safe Example
 ############################################################
-POST http://localhost:5003/api/assessment
+POST ${import.meta.env.VITE_BACKEND_BASEURL}/api/assessment
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -76,7 +76,7 @@ Authorization: Bearer {{token}}
 ############################################################
 ### 7. Chat Assessment — First Message
 ############################################################
-POST http://localhost:5003/api/assessment/chat
+POST ${import.meta.env.VITE_BACKEND_BASEURL}/api/assessment/chat
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJlbWFpbCI6InRlc3QxMkBleGFtcGxlLmNvbSIsImlhdCI6MTc2NDg1NzM4MCwiZXhwIjoxNzY1NDYyMTgwfQ.jvLcr4QbKPE4eN7q11HIRLdjUrg9MaCBOg-BlNAZSWU
 
@@ -91,7 +91,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJlbWFpb
 ############################################################
 ### 8. Chat Assessment — Follow-up Message With History
 ############################################################
-POST http://localhost:5003/api/assessment/chat
+POST ${import.meta.env.VITE_BACKEND_BASEURL}/api/assessment/chat
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJlbWFpbCI6InRlc3QxMkBleGFtcGxlLmNvbSIsImlhdCI6MTc2NDg1NzM4MCwiZXhwIjoxNzY1NDYyMTgwfQ.jvLcr4QbKPE4eN7q11HIRLdjUrg9MaCBOg-BlNAZSWU
 
@@ -109,7 +109,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJlbWFpb
 ############################################################
 ### 9. Chat Assessment — Finalization Example
 ############################################################
-POST http://localhost:5003/api/assessment/chat
+POST ${import.meta.env.VITE_BACKEND_BASEURL}/api/assessment/chat
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJlbWFpbCI6InRlc3QxMkBleGFtcGxlLmNvbSIsImlhdCI6MTc2NDg1NzM4MCwiZXhwIjoxNzY1NDYyMTgwfQ.jvLcr4QbKPE4eN7q11HIRLdjUrg9MaCBOg-BlNAZSWU
 

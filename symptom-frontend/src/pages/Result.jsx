@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import ConditionCard from "../components/ConditionCard";
 import RecommendationCard from "../components/RecommendationCard";
 
-
 export default function Result() {
   const { sessionId } = useParams();
   const navigate = useNavigate();
@@ -20,7 +19,7 @@ export default function Result() {
       try {
         setLoading(true);
         const res = await fetch(
-          "http://localhost:5003/api/assessment/history",
+          `${import.meta.env.VITE_BACKEND_BASEURL}/api/assessment/history`,
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -84,7 +83,6 @@ export default function Result() {
       </div>
     );
   }
-
 
   // Normalize conditions (array of strings or objects)
   const conditions = result.possible_conditions || [];

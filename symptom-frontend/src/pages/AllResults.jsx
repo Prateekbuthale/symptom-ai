@@ -17,7 +17,7 @@ export default function AllResults() {
       try {
         setLoading(true);
         const res = await fetch(
-          "http://localhost:5003/api/assessment/history",
+          `${import.meta.env.VITE_BACKEND_BASEURL}/api/assessment/history`,
           {
             headers: {
               Authorization: "Bearer " + token,

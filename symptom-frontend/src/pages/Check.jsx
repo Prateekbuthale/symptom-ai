@@ -38,11 +38,14 @@ export default function Check() {
 
     try {
       setHistoryLoading(true);
-      const res = await fetch("http://localhost:5003/api/assessment/history", {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_BASEURL}/api/assessment/history`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
 
       if (res.status === 401) {
         localStorage.removeItem("token");
@@ -197,18 +200,21 @@ export default function Check() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5003/api/assessment/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-        body: JSON.stringify({
-          message: newUserMsg.content,
-          history: updatedMessages,
-          sessionId,
-        }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_BASEURL}/api/assessment/chat`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+          body: JSON.stringify({
+            message: newUserMsg.content,
+            history: updatedMessages,
+            sessionId,
+          }),
+        }
+      );
 
       if (res.status === 401) {
         localStorage.removeItem("token");

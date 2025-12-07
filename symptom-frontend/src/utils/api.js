@@ -1,9 +1,9 @@
-const BASE_URL = "http://localhost:5003";
+
 
 export async function submitAssessment(data) {
   const token = localStorage.getItem("token");
 
-  const res = await fetch(`${BASE_URL}/api/assessment`, {
+  const res = await fetch(`${import.meta.env.BACKEND_BASEURL}/api/assessment`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
