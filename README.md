@@ -171,6 +171,6 @@ npm run dev   # Open http://localhost:5173
 
 ## 📹 Demo Video
 
-_(To add: Link here when ready.)_
+ [click here](https://drive.google.com/file/d/1jWr12XgTxIelbKeNgKNDsV60X-_fW90W/view?usp=drive_link)
 
 ---
